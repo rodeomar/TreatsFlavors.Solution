@@ -1,0 +1,49 @@
+﻿@model List<Treat>
+
+@{
+    ViewData["Title"] = "Treats Index";
+}
+
+<div class="container">
+    <h2>Treats</h2>
+    <div class="row">
+        @foreach (var treat in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@treat.Name</h5>
+                        <a href="#" class="btn btn-primary">Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="text-center">
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createTreatModal">
+            Create Treat
+        </button>
+    </div>
+</div>
+
+<div class="modal fade" id="createTreatModal" tabindex="-1" role="dialog" aria-labelledby="createTreatModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createTreatModalLabel">Create New Treat</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h1 class="mb-4">Enter the Name of a Treat</h1>
+                <form asp-controller="Treats" asp-action="Create" method="post">
+                    <div class="form-group">
+                        <label for="Name">Treat Name:</label>
+                        <input type="text" class="form-control" id="Name" name="Name" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
