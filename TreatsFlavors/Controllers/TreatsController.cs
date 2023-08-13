@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using TreatsFlavors.Models;
 
 namespace TreatsFlavors.Controllers
@@ -14,21 +13,38 @@ namespace TreatsFlavors.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var treats = _context.Treats.ToList();
+            var treats = await _context.Treats.ToListAsync();
+            
             return View(treats);
         }
 
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Name")] Treat treat)
+        public async Task<IActionResult> Create([Bind("Name")] Treat treat)
         {
-            
             _context.Add(treat);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
             
+        }
 
-            return RedirectToAction(nameof(Index));
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var treat = await _context.Treats.FirstOrDefaultAsync(t => t.Id == id);
+            treat.TreatFlavors = _context.TreatFlavors.ToList();
+
+            if (treat == null)
+            {
+                return NotFound();
+            }
+            Console.WriteLine(treat.Name);
+            return View(new { Treat=treat, Context=_context });
         }
     }
 }

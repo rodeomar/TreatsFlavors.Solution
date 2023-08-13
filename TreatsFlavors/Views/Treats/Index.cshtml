@@ -13,7 +13,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">@treat.Name</h5>
-                        <a href="#" class="btn btn-primary">Details</a>
+                        <a href="@Url.Action("Details", new { id = treat.Id })" class="btn btn-primary">Details</a>
                     </div>
                 </div>
             </div>
@@ -40,10 +40,17 @@
                         <label for="Name">Treat Name:</label>
                         <input type="text" class="form-control" id="Name" name="Name" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary my-2">Submit</button>
                 </form>
-
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    var createTreatModal = document.getElementById('createTreatModal');
+    createTreatModal.addEventListener('hidden.bs.modal', function () {
+        var form = createTreatModal.querySelector('form');
+        form.reset();
+    });
+</script>
