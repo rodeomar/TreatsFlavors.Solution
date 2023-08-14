@@ -48,6 +48,11 @@
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addFlavorModal">
                     Add Flavor
                 </button>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#removeFlavorModal">
+                    Remove Flavor
+                </button>
+            </div>
+
             </div>
 
         </div>
@@ -80,4 +85,28 @@
     </div>
 </div>
 
-
+<div class="modal fade" id="removeFlavorModal" tabindex="-1" role="dialog" aria-labelledby="removeFlavorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="removeFlavorModalLabel">Remove Flavor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-controller="Treats" asp-action="RemoveFlavor" method="post">
+                    <div class="form-group">
+                        <input type="hidden" name="treatId" value="@Model.Treat.Id" />
+                        <label for="FlavorId">Select a Flavor to Remove:</label>
+                        <select class="form-control" id="FlavorId" name="FlavorId">
+                            @foreach (var treatFlavor in Model.Treat.TreatFlavors)
+                            {
+                                <option value="@treatFlavor.FlavorId">@Model.Context.Flavors.Find(treatFlavor.FlavorId).Name</option>
+                            }
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-danger">Remove Flavor</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

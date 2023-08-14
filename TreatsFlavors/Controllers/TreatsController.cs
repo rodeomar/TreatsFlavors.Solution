@@ -20,7 +20,6 @@ namespace TreatsFlavors.Controllers
             return View(treats);
         }
 
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name")] Treat treat)
         {
             _context.Add(treat);
@@ -47,8 +46,7 @@ namespace TreatsFlavors.Controllers
         }
 
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        
         public async Task<IActionResult> AddFlavor(int TreatId, int FlavorId)
         {
             var treat = await _context.Treats.Include(t => t.TreatFlavors).FirstOrDefaultAsync(t => t.Id == TreatId);
@@ -70,6 +68,22 @@ namespace TreatsFlavors.Controllers
             }
 
             return RedirectToAction("Details", new { id = TreatId });
+        }
+
+
+        
+        public async Task<IActionResult> RemoveFlavor(int treatId, int flavorId)
+        {
+            var treat = await _context.Treats.Include(t => t.TreatFlavors).FirstOrDefaultAsync(t => t.Id == treatId);
+            var flavorToRemove = treat.TreatFlavors.FirstOrDefault(tf => tf.FlavorId == flavorId);
+
+            if (treat != null && flavorToRemove != null)
+            {
+                treat.TreatFlavors.Remove(flavorToRemove);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Details", new { id = treatId });
         }
 
     }
