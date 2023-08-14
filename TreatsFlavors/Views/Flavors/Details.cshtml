@@ -29,11 +29,39 @@
                             }
                         </tbody>
                     </table>
-
                 </div>
             </div>
             <div class="mt-3 text-center">
                 <a asp-controller="Flavors" asp-action="Index" class="btn btn-secondary">Back to List</a>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTreatModal">
+                    Add Treat
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addTreatModal" tabindex="-1" role="dialog" aria-labelledby="addTreatModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addTreatModalLabel">Add Treat</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-controller="Flavors" asp-action="AddTreat" method="post">
+                    <input type="hidden" name="flavorId" value="@Model.Flavor.Id" />
+                    <div class="form-group">
+                        <label for="treatId">Select a Treat:</label>
+                        <select class="form-control" id="treatId" name="treatId">
+                            @foreach (var treat in Model.Context.Treats)
+                            {
+                                <option value="@treat.Id">@treat.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary my-2">Add Treat</button>
+                </form>
             </div>
         </div>
     </div>
