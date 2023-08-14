@@ -35,7 +35,7 @@ namespace TreatsFlavors.Controllers
                 return NotFound();
             }
 
-            var treat = await _context.Treats.Include(t => t.TreatFlavors).FirstOrDefaultAsync(t => t.Id == id);
+            Treat? treat = await _context.Treats.Include(t => t.TreatFlavors).FirstOrDefaultAsync(t => t.Id == id);
 
             if (treat == null)
             {
@@ -49,8 +49,8 @@ namespace TreatsFlavors.Controllers
         
         public async Task<IActionResult> AddFlavor(int TreatId, int FlavorId)
         {
-            var treat = await _context.Treats.Include(t => t.TreatFlavors).FirstOrDefaultAsync(t => t.Id == TreatId);
-            var flavor = await _context.Flavors.FindAsync(FlavorId);
+            Treat? treat = await _context.Treats.Include(t => t.TreatFlavors).FirstOrDefaultAsync(t => t.Id == TreatId);
+            Flavor? flavor = await _context.Flavors.FindAsync(FlavorId);
 
             if (treat != null && flavor != null)
             {
@@ -71,11 +71,32 @@ namespace TreatsFlavors.Controllers
         }
 
 
-        
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Treat? treat = await _context.Treats.FirstOrDefaultAsync(t => t.Id == id);
+            if (treat == null)
+            {
+                return NotFound();
+            }
+
+            List<TreatFlavor> treatFlavors = _context.TreatFlavors.Where(tf => tf.TreatId == id).ToList();
+            _context.TreatFlavors.RemoveRange(treatFlavors);
+
+            _context.Treats.Remove(treat);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
+
         public async Task<IActionResult> RemoveFlavor(int treatId, int flavorId)
         {
-            var treat = await _context.Treats.Include(t => t.TreatFlavors).FirstOrDefaultAsync(t => t.Id == treatId);
-            var flavorToRemove = treat.TreatFlavors.FirstOrDefault(tf => tf.FlavorId == flavorId);
+            Treat? treat = await _context.Treats.Include(t => t.TreatFlavors).FirstOrDefaultAsync(t => t.Id == treatId);
+            TreatFlavor flavorToRemove = treat.TreatFlavors.FirstOrDefault(tf => tf.FlavorId == flavorId);
 
             if (treat != null && flavorToRemove != null)
             {

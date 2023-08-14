@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Treats Index";
 }
-
 <div class="container">
     <h2>Treats</h2>
     <div class="row">
@@ -14,6 +13,7 @@
                     <div class="card-body">
                         <h5 class="card-title">@treat.Name</h5>
                         <a href="@Url.Action("Details", new { id = treat.Id })" class="btn btn-primary">Details</a>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteTreatModal_@treat.Id">Delete</button>
                     </div>
                 </div>
             </div>
@@ -25,6 +25,7 @@
         </button>
     </div>
 </div>
+
 
 <div class="modal fade" id="createTreatModal" tabindex="-1" role="dialog" aria-labelledby="createTreatModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -47,6 +48,32 @@
     </div>
 </div>
 
+@foreach (var treat in Model)
+{
+    <div class="modal fade" id="deleteTreatModal_@treat.Id" tabindex="-1" role="dialog" aria-labelledby="deleteTreatModalLabel_@treat.Id" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteTreatModalLabel_@treat.Id">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete the treat "@treat.Name"?</p>
+                    <p class="text-danger">This will delete all details related to this treat, including from the flavors.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form asp-controller="Treats" asp-action="Delete" method="post">
+                        <input type="hidden" name="id" value="@treat.Id" />
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
 <script>
     var createTreatModal = document.getElementById('createTreatModal');
     createTreatModal.addEventListener('hidden.bs.modal', function () {
@@ -54,3 +81,4 @@
         form.reset();
     });
 </script>
+
