@@ -20,17 +20,20 @@ namespace TreatsFlavors.Controllers
             var flavors = _context.Flavors.ToList();
             return View(flavors);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+
+
+        // C - Create
         public IActionResult Create([Bind("Name")] Flavor flavor)
         {
             _context.Add(flavor);
             _context.SaveChanges();
             return RedirectToAction("Index");
-
-
         }
-        public async Task<IActionResult> Details(int? id)
+
+
+        // R - Read
+        [ActionName("Details")]      
+        public async Task<IActionResult> Read(int? id)
         {
             if (id == null)
             {
@@ -45,6 +48,35 @@ namespace TreatsFlavors.Controllers
             }
 
             return View(new { Flavor = flavor, Context = _context });
+        }
+
+        // U - Update
+        public async Task<IActionResult> Update(int flavorId, string Name)
+        {
+            Flavor? flavor = await _context.Flavors.FindAsync(flavorId);
+
+            if (flavor != null)
+            {
+                flavor.Name = Name;
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Details", new { id = flavorId });
+        }
+
+        // D - Delete
+        public async Task<IActionResult> Delete(int id)
+        {
+            var flavor = await _context.Flavors.FindAsync(id);
+            if (flavor == null)
+            {
+                return NotFound();
+            }
+
+            _context.Flavors.Remove(flavor);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -89,32 +121,6 @@ namespace TreatsFlavors.Controllers
         }
 
 
-        public async Task<IActionResult> Update(int flavorId, string Name)
-        {
-            Flavor? flavor = await _context.Flavors.FindAsync(flavorId);
-
-            if (flavor != null)
-            {
-                flavor.Name = Name;
-                await _context.SaveChangesAsync();
-            }
-
-            return RedirectToAction("Details", new { id = flavorId });
-        }
-
-
-        public async Task<IActionResult> Delete(int id)
-        {
-            var flavor = await _context.Flavors.FindAsync(id);
-            if (flavor == null)
-            {
-                return NotFound();
-            }
-
-            _context.Flavors.Remove(flavor);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Index");
-        }
+       
     }
 }

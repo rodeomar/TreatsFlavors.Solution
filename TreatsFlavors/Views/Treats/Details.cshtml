@@ -50,6 +50,8 @@
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#removeFlavorModal">
                     Remove Flavor
                 </button>
+                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editTreatModal">Edit</button>
+
             </div>
 
         </div>
@@ -104,6 +106,30 @@
                         </select>
                     </div>
                     <button type="submit" class="btn btn-danger">Remove Flavor</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="editTreatModal" tabindex="-1" role="dialog" aria-labelledby="editTreatModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editTreatModalLabel">Edit Treat</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-controller="Treats" asp-action="Update" method="post">
+                    <input type="hidden" name="id" value="@Model.Treat.Id" />
+                    <div class="form-group">
+                        <label for="editTreat">Treat Name:</label>
+                        <input type="text" class="form-control" id="editTreat" name="Name" value="@Model.Treat.Name" required>
+                    </div>
+                    <button type="submit" class="btn btn-warning my-2">Update Treat</button>
                 </form>
             </div>
         </div>

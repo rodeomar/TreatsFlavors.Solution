@@ -20,6 +20,7 @@ namespace TreatsFlavors.Controllers
             return View(treats);
         }
 
+        // C - Create
         public async Task<IActionResult> Create([Bind("Name")] Treat treat)
         {
             _context.Add(treat);
@@ -28,7 +29,9 @@ namespace TreatsFlavors.Controllers
 
         }
 
-        public async Task<IActionResult> Details(int? id)
+        // R - Read
+        [ActionName("Details")]
+        public async Task<IActionResult> Read(int? id)
         {
             if (id == null)
             {
@@ -46,7 +49,44 @@ namespace TreatsFlavors.Controllers
         }
 
 
-        
+        // U - Update
+        public async Task<IActionResult> Update(int id, string Name)
+        {
+            Treat? treat = await _context.Treats.FindAsync(id);
+
+            if (treat != null)
+            {
+                treat.Name = Name;
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Details", new { Id = id });
+        }
+
+        // D - Delete
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Treat? treat = await _context.Treats.FirstOrDefaultAsync(t => t.Id == id);
+            if (treat == null)
+            {
+                return NotFound();
+            }
+
+            List<TreatFlavor> treatFlavors = _context.TreatFlavors.Where(tf => tf.TreatId == id).ToList();
+            _context.TreatFlavors.RemoveRange(treatFlavors);
+
+            _context.Treats.Remove(treat);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
+
+
         public async Task<IActionResult> AddFlavor(int TreatId, int FlavorId)
         {
             Treat? treat = await _context.Treats.Include(t => t.TreatFlavors).FirstOrDefaultAsync(t => t.Id == TreatId);
@@ -71,32 +111,10 @@ namespace TreatsFlavors.Controllers
         }
 
 
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            Treat? treat = await _context.Treats.FirstOrDefaultAsync(t => t.Id == id);
-            if (treat == null)
-            {
-                return NotFound();
-            }
-
-            List<TreatFlavor> treatFlavors = _context.TreatFlavors.Where(tf => tf.TreatId == id).ToList();
-            _context.TreatFlavors.RemoveRange(treatFlavors);
-
-            _context.Treats.Remove(treat);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Index");
-        }
-
         public async Task<IActionResult> RemoveFlavor(int treatId, int flavorId)
         {
             Treat? treat = await _context.Treats.Include(t => t.TreatFlavors).FirstOrDefaultAsync(t => t.Id == treatId);
-            TreatFlavor flavorToRemove = treat.TreatFlavors.FirstOrDefault(tf => tf.FlavorId == flavorId);
+            TreatFlavor? flavorToRemove = treat.TreatFlavors.FirstOrDefault(tf => tf.FlavorId == flavorId);
 
             if (treat != null && flavorToRemove != null)
             {
