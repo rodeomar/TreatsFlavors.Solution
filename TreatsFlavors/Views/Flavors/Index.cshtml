@@ -1,0 +1,37 @@
+﻿@model List<Flavor>
+
+@{
+    ViewData["Title"] = "Flavors Index";
+}
+
+<div class="container">
+    <h2>Flavors</h2>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <a asp-controller="Flavors" asp-action="Create" class="btn btn-success">Add Flavor</a>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var flavor in Model)
+                    {
+                        <tr>
+                            <td>@flavor.Id</td>
+                            <td>@flavor.Name</td>
+                            <td>
+                                <a asp-controller="Flavors" asp-action="Details" asp-route-id="@flavor.Id" class="btn btn-primary">Details</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
