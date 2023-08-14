@@ -89,6 +89,18 @@ namespace TreatsFlavors.Controllers
         }
 
 
+        public async Task<IActionResult> Update(int flavorId, string Name)
+        {
+            Flavor? flavor = await _context.Flavors.FindAsync(flavorId);
+
+            if (flavor != null)
+            {
+                flavor.Name = Name;
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Details", new { id = flavorId });
+        }
 
 
         public async Task<IActionResult> Delete(int id)

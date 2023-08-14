@@ -64,6 +64,9 @@
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTreatModal">
                     Add Treat
                 </button>
+                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editFlavorModal">
+                    Edit
+                </button>
             </div>
         </div>
     </div>
@@ -89,6 +92,27 @@
                         </select>
                     </div>
                     <button type="submit" class="btn btn-primary my-2">Add Treat</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editFlavorModal" tabindex="-1" role="dialog" aria-labelledby="editFlavorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editFlavorModalLabel">Edit Flavor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-controller="Flavors" asp-action="Update" method="post">
+                    <input type="hidden" name="flavorId" value="@Model.Flavor.Id" />
+                    <div class="form-group">
+                        <label for="editName">Flavor Name:</label>
+                        <input type="text" class="form-control" id="editName" name="Name" value="@Model.Flavor.Name" required>
+                    </div>
+                    <button type="submit" class="btn btn-warning my-2">Update Flavor</button>
                 </form>
             </div>
         </div>
