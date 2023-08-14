@@ -29,5 +29,19 @@ namespace TreatsFlavors.Controllers
 
 
         }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var flavor = await _context.Flavors.FindAsync(id);
+            if (flavor == null)
+            {
+                return NotFound();
+            }
+
+            _context.Flavors.Remove(flavor);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
     }
 }

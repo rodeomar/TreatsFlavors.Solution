@@ -27,6 +27,7 @@
                             <td>@flavor.Name</td>
                             <td>
                                 <a asp-controller="Flavors" asp-action="Details" asp-route-id="@flavor.Id" class="btn btn-primary">Details</a>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-@flavor.Id">Delete</button>
                             </td>
                         </tr>
                     }
@@ -55,3 +56,37 @@
         </div>
     </div>
 </div>
+
+
+@foreach (var flavor in Model)
+{
+    <div class="modal fade" id="confirmDeleteModal-@flavor.Id" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel-@flavor.Id" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel-@flavor.Id">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-danger">WARNING: Deleting the flavor "@flavor.Name" will also remove it from all associated treats.</p>
+                    <p>Are you sure you want to proceed?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a asp-controller="Flavors" asp-action="Delete" asp-route-id="@flavor.Id" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<script>
+    var createTreatModal = document.getElementById('addFlavorModal');
+    createTreatModal.addEventListener('hidden.bs.modal', function () {
+        var form = createTreatModal.querySelector('form');
+        form.reset();
+    });
+</script>
+
