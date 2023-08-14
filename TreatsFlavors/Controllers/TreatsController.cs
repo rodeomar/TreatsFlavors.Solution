@@ -16,7 +16,7 @@ namespace TreatsFlavors.Controllers
         public async Task<IActionResult> Index()
         {
             var treats = await _context.Treats.ToListAsync();
-            
+
             return View(treats);
         }
 
@@ -26,7 +26,7 @@ namespace TreatsFlavors.Controllers
             _context.Add(treat);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
-            
+
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -36,15 +36,41 @@ namespace TreatsFlavors.Controllers
                 return NotFound();
             }
 
-            var treat = await _context.Treats.FirstOrDefaultAsync(t => t.Id == id);
-            treat.TreatFlavors = _context.TreatFlavors.ToList();
+            var treat = await _context.Treats.Include(t => t.TreatFlavors).FirstOrDefaultAsync(t => t.Id == id);
 
             if (treat == null)
             {
                 return NotFound();
             }
-            Console.WriteLine(treat.Name);
-            return View(new { Treat=treat, Context=_context });
+
+            return View(new { Treat = treat, Context = _context });
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddFlavor(int TreatId, int FlavorId)
+        {
+            var treat = await _context.Treats.Include(t => t.TreatFlavors).FirstOrDefaultAsync(t => t.Id == TreatId);
+            var flavor = await _context.Flavors.FindAsync(FlavorId);
+
+            if (treat != null && flavor != null)
+            {
+                try
+                {
+                    treat.TreatFlavors.Add(new TreatFlavor { TreatId = treat.Id, FlavorId = flavor.Id });
+                    await _context.SaveChangesAsync();
+                }
+                catch (InvalidOperationException)
+                {
+
+                    return RedirectToAction("Details", new { id = TreatId });
+
+                }
+            }
+
+            return RedirectToAction("Details", new { id = TreatId });
+        }
+
     }
 }
