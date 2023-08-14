@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TreatsFlavors.Models;
 
@@ -22,9 +23,11 @@ namespace TreatsFlavors
                     )
             );
 
-            var app = builder.Build();
 
-          
+
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+            var app = builder.Build();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
