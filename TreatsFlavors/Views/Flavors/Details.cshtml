@@ -17,6 +17,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Treat Name</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -25,6 +26,33 @@
                                 <tr>
                                     <td>@treatFlavor.Treat.Id</td>
                                     <td>@treatFlavor.Treat.Name</td>
+                                    <td>
+                                        <form asp-controller="Flavors" asp-action="RemoveTreat" method="post">
+                                            <input type="hidden" name="flavorId" value="@Model.Flavor.Id" />
+                                            <input type="hidden" name="treatId" value="@treatFlavor.Treat.Id" />
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#removeTreatModal_@treatFlavor.Treat.Id">
+                                                Remove Treat
+                                            </button>
+
+                                            <div class="modal fade" id="removeTreatModal_@treatFlavor.Treat.Id" tabindex="-1" role="dialog" aria-labelledby="removeTreatModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="removeTreatModalLabel">Remove Treat</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Are you sure you want to remove the treat "@treatFlavor.Treat.Name" from this flavor?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                            <button type="submit" class="btn btn-danger">Remove</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </td>
                                 </tr>
                             }
                         </tbody>

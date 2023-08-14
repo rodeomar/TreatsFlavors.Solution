@@ -74,6 +74,21 @@ namespace TreatsFlavors.Controllers
         }
 
 
+        public async Task<IActionResult> RemoveTreat(int flavorId, int treatId)
+        {
+            Flavor? flavor = await _context.Flavors.Include(f => f.TreatFlavors).FirstOrDefaultAsync(f => f.Id == flavorId);
+            TreatFlavor? treatToRemove = flavor.TreatFlavors.FirstOrDefault(tf => tf.TreatId == treatId);
+
+            if (flavor != null && treatToRemove != null)
+            {
+                flavor.TreatFlavors.Remove(treatToRemove);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Details", new { id = flavorId });
+        }
+
+
 
 
         public async Task<IActionResult> Delete(int id)
