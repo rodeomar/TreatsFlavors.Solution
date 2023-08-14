@@ -8,9 +8,9 @@
     <h2>Flavors</h2>
     <div class="row">
         <div class="col">
-            <div class="mb-3">
-                <a asp-controller="Flavors" asp-action="Create" class="btn btn-success">Add Flavor</a>
-            </div>
+            <a href="#" class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#addFlavorModal">
+                Add Flavor
+            </a>
             <table class="table">
                 <thead>
                     <tr>
@@ -32,6 +32,26 @@
                     }
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addFlavorModal" tabindex="-1" role="dialog" aria-labelledby="addFlavorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addFlavorModalLabel">Add Flavor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-controller="Flavors" asp-action="Create" method="post">
+                    <div class="form-group">
+                        <label for="Name">Flavor Name:</label>
+                        <input type="text" class="form-control" id="Name" name="Name" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary my-2">Add Flavor</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>

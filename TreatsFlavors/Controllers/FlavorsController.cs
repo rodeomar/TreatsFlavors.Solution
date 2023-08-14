@@ -19,5 +19,15 @@ namespace TreatsFlavors.Controllers
             var flavors = _context.Flavors.ToList();
             return View(flavors);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create([Bind("Name")] Flavor flavor)
+        {
+            _context.Add(flavor);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+
+
+        }
     }
 }
