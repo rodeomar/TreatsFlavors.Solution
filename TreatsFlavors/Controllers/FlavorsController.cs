@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using TreatsFlavors.Models;
@@ -29,6 +30,23 @@ namespace TreatsFlavors.Controllers
 
 
         }
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Flavor? flavor = await _context.Flavors.Include(f => f.TreatFlavors).ThenInclude(tf => tf.Treat).FirstOrDefaultAsync(f => f.Id == id);
+
+            if (flavor == null)
+            {
+                return NotFound();
+            }
+
+            return View(new { Flavor = flavor, Context = _context });
+        }
+
 
         public async Task<IActionResult> Delete(int id)
         {

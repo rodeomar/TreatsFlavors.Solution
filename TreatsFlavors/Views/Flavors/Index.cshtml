@@ -11,28 +11,35 @@
             <a href="#" class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#addFlavorModal">
                 Add Flavor
             </a>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var flavor in Model)
-                    {
+            @if (Model.Count > 0)
+            {
+                <table class="table">
+                    <thead>
                         <tr>
-                            <td>@flavor.Id</td>
-                            <td>@flavor.Name</td>
-                            <td>
-                                <a asp-controller="Flavors" asp-action="Details" asp-route-id="@flavor.Id" class="btn btn-primary">Details</a>
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-@flavor.Id">Delete</button>
-                            </td>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var flavor in Model)
+                        {
+                            <tr>
+                                <td>@flavor.Id</td>
+                                <td>@flavor.Name</td>
+                                <td>
+                                    <a asp-controller="Flavors" asp-action="Details" asp-route-id="@flavor.Id" class="btn btn-primary">Details</a>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-@flavor.Id">Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>No Flavor Added Yet</p>
+            }
         </div>
     </div>
 </div>

@@ -10,7 +10,7 @@
             <h2 class="text-center">Treat Details</h2>
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title text-center">@Model.Treat.Name</h5>
+                    <h5 class="card-title text-center">@Model.Treat.Name (@Model.Treat.Id)</h5>
                     @if (Model.Treat.TreatFlavors != null)
                     {
                         <h6 class="text-center">Flavors:</h6>
@@ -24,13 +24,12 @@
                             <tbody>
                                 @foreach (TreatFlavor treatFlavor in Model.Treat.TreatFlavors)
                                 {
-                                    @if (treatFlavor.TreatId == Model.Treat.Id)
-                                    {
-                                        <tr>
-                                            <td>@treatFlavor.FlavorId</td>
-                                            <td>@Model.Context.Flavors.Find(treatFlavor.FlavorId).Name</td>
-                                        </tr>
-                                    }
+
+                                    <tr>
+                                        <td>@treatFlavor.FlavorId</td>
+                                        <td>@Model.Context.Flavors.Find(treatFlavor.FlavorId).Name</td>
+                                    </tr>
+
                                 }
                             </tbody>
                         </table>
@@ -53,10 +52,10 @@
                 </button>
             </div>
 
-            </div>
-
         </div>
+
     </div>
+</div>
 </div>
 
 <div class="modal fade" id="addFlavorModal" tabindex="-1" role="dialog" aria-labelledby="addFlavorModalLabel" aria-hidden="true">
