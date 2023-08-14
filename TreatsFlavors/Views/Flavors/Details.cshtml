@@ -27,31 +27,20 @@
                                     <td>@treatFlavor.Treat.Id</td>
                                     <td>@treatFlavor.Treat.Name</td>
                                     <td>
-                                        <form asp-controller="Flavors" asp-action="RemoveTreat" method="post">
-                                            <input type="hidden" name="flavorId" value="@Model.Flavor.Id" />
-                                            <input type="hidden" name="treatId" value="@treatFlavor.Treat.Id" />
+                                        @if (User.Identity.IsAuthenticated)
+                                        {
                                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#removeTreatModal_@treatFlavor.Treat.Id">
                                                 Remove Treat
                                             </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                                Remove Treat
+                                            </button>
+                                        }
 
-                                            <div class="modal fade" id="removeTreatModal_@treatFlavor.Treat.Id" tabindex="-1" role="dialog" aria-labelledby="removeTreatModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="removeTreatModalLabel">Remove Treat</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            Are you sure you want to remove the treat "@treatFlavor.Treat.Name" from this flavor?
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                                            <button type="submit" class="btn btn-danger">Remove</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
+
                                     </td>
                                 </tr>
                             }
@@ -59,18 +48,58 @@
                     </table>
                 </div>
             </div>
-            <div class="mt-3 text-center">
-                <a asp-controller="Flavors" asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+        <div class="mt-3 text-center">
+            <a asp-controller="Flavors" asp-action="Index" class="btn btn-secondary">Back to List</a>
+            @if (User.Identity.IsAuthenticated)
+            {
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTreatModal">
                     Add Treat
                 </button>
                 <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editFlavorModal">
                     Edit
                 </button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
+                    Add Treat
+                </button>
+                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#loginModal">
+                    Edit
+                </button>
+            }
+        </div>
+
+    </div>
+</div>
+
+
+@foreach (var treatFlavor in Model.Flavor.TreatFlavors)
+{
+    <div class="modal fade" id="removeTreatModal_@treatFlavor.Treat.Id" tabindex="-1" role="dialog" aria-labelledby="removeTreatModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="removeTreatModalLabel">Remove Treat</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to remove the treat "@treatFlavor.Treat.Name" from this flavor?
+                </div>
+                <form asp-controller="Flavors" asp-action="RemoveTreat" method="post">
+                    <input type="hidden" name="flavorId" value="@Model.Flavor.Id" />
+                    <input type="hidden" name="treatId" value="@treatFlavor.Treat.Id" />
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Remove</button>
+                    </div>
+                </form>
+
             </div>
         </div>
     </div>
-</div>
+}
 
 <div class="modal fade" id="addTreatModal" tabindex="-1" role="dialog" aria-labelledby="addTreatModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -114,6 +143,25 @@
                     </div>
                     <button type="submit" class="btn btn-warning my-2">Update Flavor</button>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Login Required</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>You need to be logged in to perform this action.</p>
+                <p>Click below to login or register.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="@Url.Action("Login", "Account")" class="btn btn-primary">Login</a>
             </div>
         </div>
     </div>

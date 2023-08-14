@@ -29,7 +29,14 @@
                                 <td>@flavor.Name</td>
                                 <td>
                                     <a asp-controller="Flavors" asp-action="Details" asp-route-id="@flavor.Id" class="btn btn-primary">Details</a>
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-@flavor.Id">Delete</button>
+
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-@flavor.Id">Delete</button>
+                                    }else{
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#loginModal">Delete</button>
+
+                                    }
                                 </td>
                             </tr>
                         }
@@ -63,7 +70,24 @@
         </div>
     </div>
 </div>
-
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Login Required</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>You need to be logged in to perform this action.</p>
+                <p>Click below to login or register.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="@Url.Action("Login", "Account")" class="btn btn-primary">Login</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 @foreach (var flavor in Model)
 {

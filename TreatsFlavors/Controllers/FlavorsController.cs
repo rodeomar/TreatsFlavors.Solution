@@ -15,24 +15,28 @@ namespace TreatsFlavors.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var flavors = _context.Flavors.ToList();
+            var flavors = await _context.Flavors.ToListAsync();
             return View(flavors);
         }
 
-
         // C - Create
-        public IActionResult Create([Bind("Name")] Flavor flavor)
+        public async Task<IActionResult> Create([Bind("Name")] Flavor flavor)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             _context.Add(flavor);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
 
         // R - Read
-        [ActionName("Details")]      
+        [ActionName("Details")]
         public async Task<IActionResult> Read(int? id)
         {
             if (id == null)
@@ -53,6 +57,10 @@ namespace TreatsFlavors.Controllers
         // U - Update
         public async Task<IActionResult> Update(int flavorId, string Name)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             Flavor? flavor = await _context.Flavors.FindAsync(flavorId);
 
             if (flavor != null)
@@ -67,6 +75,10 @@ namespace TreatsFlavors.Controllers
         // D - Delete
         public async Task<IActionResult> Delete(int id)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             var flavor = await _context.Flavors.FindAsync(id);
             if (flavor == null)
             {
@@ -82,6 +94,10 @@ namespace TreatsFlavors.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddTreat(int flavorId, int treatId)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             var flavor = await _context.Flavors.Include(f => f.TreatFlavors).FirstOrDefaultAsync(f => f.Id == flavorId);
             var treat = await _context.Treats.FirstOrDefaultAsync(t => t.Id == treatId);
 
@@ -108,6 +124,10 @@ namespace TreatsFlavors.Controllers
 
         public async Task<IActionResult> RemoveTreat(int flavorId, int treatId)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             Flavor? flavor = await _context.Flavors.Include(f => f.TreatFlavors).FirstOrDefaultAsync(f => f.Id == flavorId);
             TreatFlavor? treatToRemove = flavor.TreatFlavors.FirstOrDefault(tf => tf.TreatId == treatId);
 
@@ -121,6 +141,6 @@ namespace TreatsFlavors.Controllers
         }
 
 
-       
+
     }
 }

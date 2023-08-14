@@ -44,20 +44,51 @@
             </div>
             <div class="mt-3 text-center">
                 <a asp-controller="Treats" asp-action="Index" class="btn btn-secondary">Back to List</a>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addFlavorModal">
-                    Add Flavor
-                </button>
-                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#removeFlavorModal">
-                    Remove Flavor
-                </button>
-                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editTreatModal">Edit</button>
 
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addFlavorModal">
+                        Add Flavor
+                    </button>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#removeFlavorModal">
+                        Remove Flavor
+                    </button>
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editTreatModal">Edit</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
+                        Add Flavor
+                    </button>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#loginModal">
+                        Remove Flavor
+                    </button>
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#loginModal">Edit</button>
+                }
             </div>
 
         </div>
 
     </div>
-</div>
+
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Login Required</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>You need to be logged in to perform this action.</p>
+                    <p>Click below to login or register.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a href="@Url.Action("Login", "Account")" class="btn btn-primary">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="modal fade" id="addFlavorModal" tabindex="-1" role="dialog" aria-labelledby="addFlavorModalLabel" aria-hidden="true">

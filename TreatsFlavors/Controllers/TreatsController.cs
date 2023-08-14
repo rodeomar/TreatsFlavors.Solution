@@ -23,6 +23,10 @@ namespace TreatsFlavors.Controllers
         // C - Create
         public async Task<IActionResult> Create([Bind("Name")] Treat treat)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             _context.Add(treat);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -52,6 +56,10 @@ namespace TreatsFlavors.Controllers
         // U - Update
         public async Task<IActionResult> Update(int id, string Name)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             Treat? treat = await _context.Treats.FindAsync(id);
 
             if (treat != null)
@@ -66,6 +74,10 @@ namespace TreatsFlavors.Controllers
         // D - Delete
         public async Task<IActionResult> Delete(int? id)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             if (id == null)
             {
                 return NotFound();
